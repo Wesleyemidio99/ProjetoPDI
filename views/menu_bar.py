@@ -40,3 +40,11 @@ class MenuBar:
         threshold_menu.add_command(label="Limiarização Otsu", command=self.controller.apply_threshold_otsu)
         threshold_menu.add_command(label="Limiarização Adaptativa", command=self.controller.apply_threshold_adaptive)
         filter_menu.add_cascade(label="Limiarização", menu=threshold_menu)
+
+        # Submenu de Conversão de Cores
+        color_menu = tk.Menu(filter_menu, tearoff=0)
+        color_menu.add_command(label="Converter para HSV", command=self.controller.apply_hsv)
+        color_menu.add_command(label="Converter para LAB", command=self.controller.apply_lab)
+        color_menu.add_command(label="Converter para YCrCb", command=self.controller.apply_ycrcb)
+        color_menu.add_command(label="Converter para CMYK (simulado)", command=self.controller.apply_cmyk)
+        filter_menu.add_cascade(label="Conversão de Cores", menu=color_menu)

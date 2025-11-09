@@ -3,6 +3,9 @@ from models.model import Model
 from views.view import View
 from models.edge_model import EdgeDetector
 from models.threshold_model import ThresholdModel
+from models.color_model import ColorModel
+import cv2
+
 
 class Controller:
     def __init__(self):
@@ -125,3 +128,34 @@ class Controller:
             self.view.display_processed(result)
             self.model.image = result
             self.view.log_action("Limiarização adaptativa aplicada.")
+
+    # ========== Conversão de Cores ==========
+    def apply_hsv(self):
+        result = ColorModel.to_hsv(self.model.image)
+        if result is not None:
+            self.view.display_processed(cv2.cvtColor(result, cv2.COLOR_HSV2BGR))
+            self.model.image = cv2.cvtColor(result, cv2.COLOR_HSV2BGR)
+            self.view.log_action("Conversão para HSV aplicada.")
+
+    def apply_lab(self):
+        result = ColorModel.to_lab(self.model.image)
+        if result is not None:
+            self.view.display_processed(cv2.cvtColor(result, cv2.COLOR_LAB2BGR))
+            self.model.image = cv2.cvtColor(result, cv2.COLOR_LAB2BGR)
+            self.view.log_action("Conversão para LAB aplicada.")
+
+    def apply_ycrcb(self):
+        result = ColorModel.to_ycrcb(self.model.image)
+        if result is not None:
+            self.view.display_processed(cv2.cvtColor(result, cv2.COLOR_YCrCb2BGR))
+            self.model.image = cv2.cvtColor(result, cv2.COLOR_YCrCb2BGR)
+            self.view.log_action("Conversão para YCrCb aplicada.")
+
+    def apply_cmyk(self):
+        result = ColorModel.to_cmyk(self.model.image)
+        if result is not None:
+            # Mostra só C, M, Y (ignora o canal K para visualização)
+            cmy = cv2.merge([result[..., 0], result[..., 1], result[..., 2]])
+            self.view.display_processed(cmy)
+            self.model.image = cmy
+            self.view.log_action("Conversão para CMYK aplicada (simulada).")
