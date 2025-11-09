@@ -102,3 +102,23 @@ class Controller:
         else:
             from tkinter import messagebox
             messagebox.showwarning("Aviso", "Nenhuma imagem carregada para restaurar.")
+
+
+    # ========== Limiarização ==========
+    def apply_threshold_global(self):
+        result = self.model.threshold_global(127)
+        if result is not None:
+            self.view.display_processed(result)
+            self.view.log_action("Limiarização global aplicada (valor 127).")
+
+    def apply_threshold_otsu(self):
+        result = self.model.threshold_otsu()
+        if result is not None:
+            self.view.display_processed(result)
+            self.view.log_action("Limiarização Otsu aplicada.")
+
+    def apply_threshold_adaptive(self):
+        result = self.model.threshold_adaptive()
+        if result is not None:
+            self.view.display_processed(result)
+            self.view.log_action("Limiarização adaptativa aplicada.")

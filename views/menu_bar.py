@@ -10,13 +10,14 @@ class MenuBar:
         file_menu.add_command(label="Abrir", command=controller.open_image)
         file_menu.add_command(label="Salvar como...", command=controller.save_image)
         file_menu.add_separator()
-        file_menu.add_command(label="Sair", command=root.quit)
-        self.menubar.add_cascade(label="Arquivo", menu=file_menu)
 
         # NOVO: botão de reset
         file_menu.add_command(label="Resetar imagem", command=controller.reset_image)
         file_menu.add_separator()
 
+        file_menu.add_command(label="Sair", command=root.quit)
+        self.menubar.add_cascade(label="Arquivo", menu=file_menu)
+        
         # Menu Filtros
         filter_menu = tk.Menu(self.menubar, tearoff=0)
         filter_menu.add_command(label="Converter para tons de cinza", command=controller.apply_gray)
@@ -32,3 +33,10 @@ class MenuBar:
         edge_menu.add_command(label="Laplaciano", command=self.controller.apply_laplacian)
         edge_menu.add_command(label="Canny", command=self.controller.apply_canny)
         filter_menu.add_cascade(label="Detecção de Bordas", menu=edge_menu)
+
+        # Menu de Limiarização
+        threshold_menu = tk.Menu(filter_menu, tearoff=0)
+        threshold_menu.add_command(label="Limiarização Global", command=self.controller.apply_threshold_global)
+        threshold_menu.add_command(label="Limiarização Otsu", command=self.controller.apply_threshold_otsu)
+        threshold_menu.add_command(label="Limiarização Adaptativa", command=self.controller.apply_threshold_adaptive)
+        filter_menu.add_cascade(label="Limiarização", menu=threshold_menu)

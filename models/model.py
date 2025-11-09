@@ -60,3 +60,36 @@ class Model:
         rgb = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
         img = Image.fromarray(rgb)
         return ImageTk.PhotoImage(img)
+
+    # ========== Limiarização ==========
+    def threshold_global(self, thresh_value=127):
+        """Aplica limiarização global simples."""
+        if self.image is None:
+            return None
+        gray = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
+        _, thresh = cv2.threshold(gray, thresh_value, 255, cv2.THRESH_BINARY)
+        self.image = cv2.cvtColor(thresh, cv2.COLOR_GRAY2BGR)
+        return self.image
+
+    def threshold_otsu(self):
+        """Aplica limiarização automática de Otsu."""
+        if self.image is None:
+            return None
+        gray = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
+        _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        self.image = cv2.cvtColor(thresh, cv2.COLOR_GRAY2BGR)
+        return self.image
+
+    def threshold_adaptive(self):
+        """Aplica limiarização adaptativa."""
+        if self.image is None:
+            return None
+        gray = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
+        thresh = cv2.adaptiveThreshold(
+            gray, 255,
+            cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+            cv2.THRESH_BINARY,
+            11, 2
+        )
+        self.image = cv2.cvtColor(thresh, cv2.COLOR_GRAY2BGR)
+        return self.image
