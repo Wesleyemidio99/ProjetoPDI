@@ -60,3 +60,22 @@ class Model:
         rgb = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
         img = Image.fromarray(rgb)
         return ImageTk.PhotoImage(img)
+    
+    def get_pixel_values_from(self, image, x, y):
+        """Retorna os valores RGB e HSV do pixel (x,y) de uma imagem específica."""
+        if image is None:
+            return None
+
+        h, w = image.shape[:2]
+        if not (0 <= x < w and 0 <= y < h):
+            return None
+
+        b, g, r = image[y, x]
+        hsv_img = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+        h_val, s_val, v_val = hsv_img[y, x]
+
+        return {
+            "coord": (x, y),
+            "rgb": (int(r), int(g), int(b)),
+            "hsv": (int(h_val), int(s_val), int(v_val))
+        }

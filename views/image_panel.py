@@ -3,7 +3,8 @@ from PIL import Image, ImageTk
 import cv2
 
 class ImagePanel:
-    def __init__(self, root):
+    def __init__(self, root, controller):
+        self.controller = controller
         # Frame principal (área central da janela)
         self.frame = tk.Frame(root, bg="#2b2b2b")
         self.frame.pack(fill="both", expand=True)

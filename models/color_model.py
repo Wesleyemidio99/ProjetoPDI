@@ -39,3 +39,10 @@ class ColorModel:
                            (y * 255).astype('uint8'),
                            (k * 255).astype('uint8'))))
         return cmyk
+
+    @staticmethod
+    def to_rgba(image):
+        """Converte imagem BGR para RGBA (adiciona canal alfa)."""
+        if image is None:
+            return None
+        return cv2.cvtColor(image, cv2.COLOR_BGR2BGRA)

@@ -159,3 +159,25 @@ class Controller:
             self.view.display_processed(cmy)
             self.model.image = cmy
             self.view.log_action("Conversão para CMYK aplicada (simulada).")
+
+    def apply_rgba(self):
+        result = ColorModel.to_rgba(self.model.image)
+        if result is not None:
+            self.view.display_processed(cv2.cvtColor(result, cv2.COLOR_BGRA2BGR))
+            self.model.image = cv2.cvtColor(result, cv2.COLOR_BGRA2BGR)
+            self.view.log_action("Conversão para RGBA aplicada.")
+
+    def handle_pixel_click(self, x, y, panel_type):
+        """Busca e exibe os valores RGB e HSV do pixel clicado."""
+        if panel_type == "original":
+            image = self.model.original
+        else:
+            image = self.model.image
+
+        values = self.model.get_pixel_values_from(image, x, y)
+        if values:
+            text = (
+                f"[{panel_type.upper()}] Pixel (x={values['coord'][0]}, y={values['coord'][1]})\n"
+                f"RGB = {values['rgb']} | HSV = {values['hsv']}"
+            )
+            self.view.show_pixel_info(text)

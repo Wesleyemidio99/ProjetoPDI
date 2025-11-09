@@ -48,3 +48,4 @@ class MenuBar:
         color_menu.add_command(label="Converter para YCrCb", command=self.controller.apply_ycrcb)
         color_menu.add_command(label="Converter para CMYK (simulado)", command=self.controller.apply_cmyk)
         filter_menu.add_cascade(label="Conversão de Cores", menu=color_menu)
+        color_menu.add_command(label="Converter para RGBA", command=self.controller.apply_rgba)
