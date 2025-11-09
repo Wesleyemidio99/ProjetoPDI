@@ -49,3 +49,19 @@ class MenuBar:
         color_menu.add_command(label="Converter para CMYK (simulado)", command=self.controller.apply_cmyk)
         filter_menu.add_cascade(label="Conversão de Cores", menu=color_menu)
         color_menu.add_command(label="Converter para RGBA", command=self.controller.apply_rgba)
+
+        # ===== Menu Análises =====
+        analysis_menu = tk.Menu(self.menubar, tearoff=0)
+        analysis_menu.add_command(label="Exibir Histograma", command=self.controller.show_histogram)
+
+        # (Opcional) se quiser exibir o histograma em tons de cinza
+        if hasattr(self.controller, "show_histogram_gray"):
+            analysis_menu.add_command(label="Exibir Histograma (Tons de Cinza)", command=self.controller.show_histogram_gray)
+
+        # (Opcional) futura ferramenta: exibir canais de cor
+        if hasattr(self.controller, "show_color_channels"):
+            analysis_menu.add_command(label="Exibir Canais de Cor", command=self.controller.show_color_channels)
+
+        # Adiciona o menu principal
+        self.menubar.add_cascade(label="Análises", menu=analysis_menu)
+

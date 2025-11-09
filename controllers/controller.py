@@ -4,6 +4,9 @@ from views.view import View
 from models.edge_model import EdgeDetector
 from models.threshold_model import ThresholdModel
 from models.color_model import ColorModel
+from models.histogram_model import HistogramModel
+
+import tkinter as tk
 import cv2
 
 
@@ -181,3 +184,18 @@ class Controller:
                 f"RGB = {values['rgb']} | HSV = {values['hsv']}"
             )
             self.view.show_pixel_info(text)
+
+    # ========== Histograma ==========
+    def show_histogram(self):
+        """Abre uma janela para exibir o histograma da imagem atual."""
+        if self.model.image is None:
+            messagebox.showwarning("Aviso", "Nenhuma imagem carregada.")
+            return
+
+        # Cria uma nova janela para o gráfico
+        hist_window = tk.Toplevel(self.root)
+        hist_window.title("Histograma da Imagem")
+        hist_window.geometry("600x400")
+
+        HistogramModel.show_histogram(self.model.image, hist_window)
+        self.view.log_action("Histograma exibido.")
