@@ -2,7 +2,7 @@ from tkinter import Tk, filedialog, messagebox
 from models.model import Model
 from views.view import View
 from models.edge_model import EdgeDetector
-
+from models.threshold_model import ThresholdModel
 
 class Controller:
     def __init__(self):
@@ -106,19 +106,22 @@ class Controller:
 
     # ========== Limiarização ==========
     def apply_threshold_global(self):
-        result = self.model.threshold_global(127)
+        result = ThresholdModel.global_threshold(self.model.image, 127)
         if result is not None:
             self.view.display_processed(result)
+            self.model.image = result
             self.view.log_action("Limiarização global aplicada (valor 127).")
 
     def apply_threshold_otsu(self):
-        result = self.model.threshold_otsu()
+        result = ThresholdModel.otsu_threshold(self.model.image)
         if result is not None:
             self.view.display_processed(result)
+            self.model.image = result
             self.view.log_action("Limiarização Otsu aplicada.")
 
     def apply_threshold_adaptive(self):
-        result = self.model.threshold_adaptive()
+        result = ThresholdModel.adaptive_threshold(self.model.image)
         if result is not None:
             self.view.display_processed(result)
+            self.model.image = result
             self.view.log_action("Limiarização adaptativa aplicada.")
