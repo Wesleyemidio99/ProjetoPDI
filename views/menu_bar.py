@@ -18,10 +18,13 @@ class MenuBar:
         filter_menu.add_command(label="Converter para tons de cinza", command=controller.apply_gray)
         filter_menu.add_command(label="Equalizar histograma", command=controller.apply_equalization)
         self.menubar.add_cascade(label="Filtros", menu=filter_menu)
-
         edge_menu = tk.Menu(filter_menu, tearoff=0)
+        edge_menu.add_command(label="Sobel X", command=self.controller.apply_sobel_x)
+        edge_menu.add_command(label="Sobel Y", command=self.controller.apply_sobel_y)
+        edge_menu.add_command(label="Sobel XY", command=self.controller.apply_sobel_xy)
+        edge_menu.add_command(label="Sobel Magnitude", command=self.controller.apply_sobel_magnitude)
+        edge_menu.add_separator()
         edge_menu.add_command(label="Sobel", command=self.controller.apply_sobel)
         edge_menu.add_command(label="Laplaciano", command=self.controller.apply_laplacian)
         edge_menu.add_command(label="Canny", command=self.controller.apply_canny)
         filter_menu.add_cascade(label="Detecção de Bordas", menu=edge_menu)
-

@@ -60,12 +60,34 @@ class Controller:
             return
 
         result = EdgeDetector.sobel(self.model.current)
+        self.view.log_action("Filtro Sobel aplicado.")
 
     def apply_laplacian(self):
         result = EdgeDetector.laplacian(self.model.current)
         self.view.update_image(result)
+        self.view.log_action("Filtro Laplaciano aplicado.")
 
     def apply_canny(self):
         result = EdgeDetector.canny(self.model.current)
         self.view.update_image(result)
+        self.view.log_action("Filtro Canny aplicado.")
 
+    def apply_sobel_x(self):
+        result = EdgeDetector.sobel_x(self.model.current)
+        self.view.update_image(result)
+        self.view.log_action("Filtro Sobel X aplicado.")
+
+    def apply_sobel_y(self):
+        result = EdgeDetector.sobel_y(self.model.current)
+        self.view.update_image(result)
+        self.view.log_action("Filtro Sobel Y aplicado.")
+
+    def apply_sobel_xy(self):
+        result = EdgeDetector.sobel_xy(self.model.current)
+        self.view.update_image(result)
+        self.view.log_action("Filtro Sobel XY aplicado.")
+
+    def apply_sobel_magnitude(self):
+        result = EdgeDetector.sobel_magnitude(self.model.current)
+        self.view.update_image(result)
+        self.view.log_action("Filtro Sobel Magnitude aplicado.")

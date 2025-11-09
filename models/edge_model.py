@@ -27,3 +27,35 @@ class EdgeDetector:
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         edges = cv2.Canny(gray, low, high)
         return edges
+
+    @staticmethod
+    def sobel_x(img):   
+        """Sobel no eixo X."""
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        sobelx = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=3)
+        return np.uint8(np.clip(np.absolute(sobelx), 0, 255))
+
+    @staticmethod
+    def sobel_y(img):
+        """Sobel no eixo Y."""
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        sobely = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=3)
+        return np.uint8(np.clip(np.absolute(sobely), 0, 255))
+
+    @staticmethod
+    def sobel_xy(img):
+        """Combinação ponderada de Sobel X e Y."""
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        sobelx = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=3)
+        sobely = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=3)
+        return cv2.addWeighted(cv2.convertScaleAbs(sobelx), 0.5, cv2.convertScaleAbs(sobely), 0.5, 0)
+
+    @staticmethod
+    def sobel_magnitude(img):
+        """Magnitude total (sqrt(Gx² + Gy²)) normalizada."""
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        sobelx = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=3)
+        sobely = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=3)
+        magnitude = np.sqrt(sobelx ** 2 + sobely ** 2)
+        magnitude = np.uint8(255 * magnitude / np.max(magnitude))
+        return magnitude

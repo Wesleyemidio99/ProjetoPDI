@@ -33,7 +33,16 @@ class View:
         from PIL import Image, ImageTk
         import cv2
 
-        image_rgb = cv2.cvtColor(result, cv2.COLOR_BGR2RGB)
+        if result is None:
+            return
+
+        # Se for imagem 2D (tons de cinza), converte para RGB
+        if len(result.shape) == 2:
+            image_rgb = cv2.cvtColor(result, cv2.COLOR_GRAY2RGB)
+        else:
+            image_rgb = cv2.cvtColor(result, cv2.COLOR_BGR2RGB)
+
+        # Converte para imagem compatível com Tkinter
         image_pil = Image.fromarray(image_rgb)
         img_tk = ImageTk.PhotoImage(image_pil)
 
