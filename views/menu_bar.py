@@ -13,6 +13,10 @@ class MenuBar:
         file_menu.add_command(label="Sair", command=root.quit)
         self.menubar.add_cascade(label="Arquivo", menu=file_menu)
 
+        # NOVO: botão de reset
+        file_menu.add_command(label="Resetar imagem", command=controller.reset_image)
+        file_menu.add_separator()
+
         # Menu Filtros
         filter_menu = tk.Menu(self.menubar, tearoff=0)
         filter_menu.add_command(label="Converter para tons de cinza", command=controller.apply_gray)

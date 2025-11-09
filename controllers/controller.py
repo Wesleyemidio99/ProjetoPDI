@@ -92,3 +92,13 @@ class Controller:
         result = EdgeDetector.sobel_magnitude(self.model.current)
         self.view.update_image(result)
         self.view.log_action("Filtro Sobel Magnitude aplicado.")
+
+    def reset_image(self):
+        """Restaura a imagem processada ao estado original."""
+        restored = self.model.reset_image()
+        if restored is not None:
+            self.view.display_processed(restored)
+            self.view.log_action("Imagem restaurada ao estado original.")
+        else:
+            from tkinter import messagebox
+            messagebox.showwarning("Aviso", "Nenhuma imagem carregada para restaurar.")
