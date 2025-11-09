@@ -1,6 +1,8 @@
 from tkinter import Tk, filedialog, messagebox
 from models.model import Model
 from views.view import View
+from models.edge_model import EdgeDetector
+
 
 class Controller:
     def __init__(self):
@@ -49,3 +51,21 @@ class Controller:
         result = self.model.equalize_histogram()
         self.view.display_image(result)
         self.view.log_action("Equalização de histograma aplicada.")
+
+    def apply_sobel(self):
+        result = EdgeDetector.sobel(self.model.current)
+        self.view.update_image(result)
+        if self.model.current is None:
+            messagebox.showerror("Erro", "Nenhuma imagem carregada!")
+            return
+
+        result = EdgeDetector.sobel(self.model.current)
+
+    def apply_laplacian(self):
+        result = EdgeDetector.laplacian(self.model.current)
+        self.view.update_image(result)
+
+    def apply_canny(self):
+        result = EdgeDetector.canny(self.model.current)
+        self.view.update_image(result)
+
