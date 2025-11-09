@@ -22,12 +22,13 @@ class Controller:
 
     def open_image(self):
         path = filedialog.askopenfilename(
-            title="Selecione uma imagem",
-            filetypes=[("Arquivos de imagem", "*.png;*.jpg;*.jpeg;*.bmp")]
+        title="Selecione uma imagem",
+        filetypes=[("Arquivos de imagem", "*.png;*.jpg;*.jpeg;*.bmp")]
         )
         if path:
             image = self.model.load_image(path)
-            self.view.display_image(image)
+            self.view.display_original(image)
+            self.view.display_processed(image)
             self.view.log_action(f"Imagem carregada: {path}")
 
     def save_image(self):
