@@ -5,6 +5,8 @@ from models.edge_model import EdgeDetector
 from models.threshold_model import ThresholdModel
 from models.color_model import ColorModel
 from models.histogram_model import HistogramModel
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 import tkinter as tk
 import cv2
@@ -68,36 +70,43 @@ class Controller:
 
         result = EdgeDetector.sobel(self.model.current)
         self.view.log_action("Filtro Sobel aplicado.")
+        self.show_histogram()                       # atualiza o histograma
 
     def apply_laplacian(self):
         result = EdgeDetector.laplacian(self.model.current)
         self.view.update_image(result)
         self.view.log_action("Filtro Laplaciano aplicado.")
+        self.show_histogram()                       # atualiza o histograma
 
     def apply_canny(self):
         result = EdgeDetector.canny(self.model.current)
         self.view.update_image(result)
         self.view.log_action("Filtro Canny aplicado.")
+        self.show_histogram()                       # atualiza o histograma
 
     def apply_sobel_x(self):
         result = EdgeDetector.sobel_x(self.model.current)
         self.view.update_image(result)
         self.view.log_action("Filtro Sobel X aplicado.")
+        self.show_histogram()                       # atualiza o histograma
 
     def apply_sobel_y(self):
         result = EdgeDetector.sobel_y(self.model.current)
         self.view.update_image(result)
         self.view.log_action("Filtro Sobel Y aplicado.")
+        self.show_histogram()                       # atualiza o histograma
 
     def apply_sobel_xy(self):
         result = EdgeDetector.sobel_xy(self.model.current)
         self.view.update_image(result)
         self.view.log_action("Filtro Sobel XY aplicado.")
+        self.show_histogram()                       # atualiza o histograma
 
     def apply_sobel_magnitude(self):
         result = EdgeDetector.sobel_magnitude(self.model.current)
         self.view.update_image(result)
         self.view.log_action("Filtro Sobel Magnitude aplicado.")
+        self.show_histogram()                       # atualiza o histograma
 
     def reset_image(self):
         """Restaura a imagem processada ao estado original."""
@@ -117,6 +126,7 @@ class Controller:
             self.view.display_processed(result)
             self.model.image = result
             self.view.log_action("Limiarização global aplicada (valor 127).")
+            self.show_histogram()                       # atualiza o histograma
 
     def apply_threshold_otsu(self):
         result = ThresholdModel.otsu_threshold(self.model.image)
@@ -124,6 +134,7 @@ class Controller:
             self.view.display_processed(result)
             self.model.image = result
             self.view.log_action("Limiarização Otsu aplicada.")
+            self.show_histogram()                       # atualiza o histograma
 
     def apply_threshold_adaptive(self):
         result = ThresholdModel.adaptive_threshold(self.model.image)
@@ -131,6 +142,7 @@ class Controller:
             self.view.display_processed(result)
             self.model.image = result
             self.view.log_action("Limiarização adaptativa aplicada.")
+            self.show_histogram()                       # atualiza o histograma
 
     # ========== Conversão de Cores ==========
     def apply_hsv(self):
@@ -227,3 +239,27 @@ class Controller:
             return
         result = ThresholdModel.multilevel_threshold(img, levels)
         self.view.image_panel.update_image(result)
+
+    def show_histogram(self):
+        img = self.view.image_panel.current_image
+        if img is None:
+            return
+
+        hist = ThresholdModel.histogram(img)
+        if hist is None:
+            return
+
+        # Criar figura do matplotlib
+        fig = plt.Figure(figsize=(4, 2))
+        ax = fig.add_subplot(111)
+        ax.plot(hist)
+        ax.set_title("Histograma")
+        ax.set_xlim([0, 255])
+
+        # Adicionar canvas no ImagePanel
+        if hasattr(self, 'hist_canvas'):
+            self.hist_canvas.get_tk_widget().destroy()  # remove canvas antigo
+
+        self.hist_canvas = FigureCanvasTkAgg(fig, master=self.view.image_panel.frame)
+        self.hist_canvas.get_tk_widget().grid(row=2, column=1, pady=10)  # abaixo do painel processado
+        self.hist_canvas.draw()

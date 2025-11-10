@@ -45,3 +45,14 @@ class ThresholdModel:
         # normaliza, quantiza e volta para 0-255
         multilevel = (gray / 256 * levels).astype('uint8') * (256 // levels)
         return cv2.cvtColor(multilevel, cv2.COLOR_GRAY2BGR)
+    
+    @staticmethod
+    def histogram(image):
+        """
+        Retorna o histograma da imagem (em escala de cinza).
+        """
+        if image is None:
+            return None
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        hist = cv2.calcHist([gray], [0], None, [256], [0, 256])
+        return hist
