@@ -44,6 +44,24 @@ class ControlPanel:
         self.current_brightness = 0
         self.current_contrast = 0
 
+        # ===== Seção de Limiarização Multiníveis =====
+        tk.Label(self.frame, text="Limiarização Multiníveis", fg="white", bg="#333", font=("Arial", 10, "bold")).pack(pady=(10, 5))
+
+        self.tones_slider = tk.Scale(
+            self.frame,
+            from_=2,
+            to=16,
+            resolution=2,
+            orient="horizontal",
+            length=200,
+            bg="#333",
+            fg="white",
+            highlightthickness=0,
+            command=self.on_tone_change
+        )
+        self.tones_slider.set(4)  # valor inicial
+        self.tones_slider.pack(pady=(0, 10))
+
     # ===== Métodos de integração =====
     def set_controller(self, controller):
         """Define o controller, chamado pela View."""
@@ -73,3 +91,11 @@ class ControlPanel:
         """Adiciona mensagem no histórico."""
         self.log_area.insert(tk.END, f"> {text}\n")
         self.log_area.see(tk.END)
+
+    def on_tone_change(self, value):
+        """Envia o valor selecionado pelo slider ao Controller."""
+        levels = int(value)
+        if self.controller:
+            self.controller.apply_multilevel_threshold(levels)
+            self.add_log(f"Limiarização multinível aplicada com {levels} tons.")
+

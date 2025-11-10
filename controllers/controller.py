@@ -220,3 +220,10 @@ class Controller:
 
         # Atualiza a imagem processada no painel
         self.view.image_panel.update_image(equalized)
+
+    def apply_multilevel_threshold(self, levels=4):
+        img = self.view.image_panel.current_image
+        if img is None:
+            return
+        result = ThresholdModel.multilevel_threshold(img, levels)
+        self.view.image_panel.update_image(result)

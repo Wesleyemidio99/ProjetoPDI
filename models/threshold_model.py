@@ -35,3 +35,13 @@ class ThresholdModel:
             11, 2
         )
         return cv2.cvtColor(thresh, cv2.COLOR_GRAY2BGR)
+    
+    @staticmethod
+    def multilevel_threshold(image, levels=4):
+        """Aplica limiarização multissegmentada (quantização de tons)."""
+        if image is None:
+            return None
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        # normaliza, quantiza e volta para 0-255
+        multilevel = (gray / 256 * levels).astype('uint8') * (256 // levels)
+        return cv2.cvtColor(multilevel, cv2.COLOR_GRAY2BGR)
