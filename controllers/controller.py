@@ -109,14 +109,21 @@ class Controller:
         self.show_histogram()                       # atualiza o histograma
 
     def reset_image(self):
-        """Restaura a imagem processada ao estado original."""
-        restored = self.model.reset_image()
-        if restored is not None:
-            self.view.display_processed(restored)
-            self.view.log_action("Imagem restaurada ao estado original.")
-        else:
-            from tkinter import messagebox
+        """Restaura a imagem original e reseta sliders."""
+        if self.model.original is None:
             messagebox.showwarning("Aviso", "Nenhuma imagem carregada para restaurar.")
+            return
+
+        # Restaura imagem original
+        self.model.image = self.model.original.copy()
+        self.view.image_panel.update_image(self.model.image)
+
+        # Reseta sliders
+        self.view.control_panel.brightness_slider.set(0)
+        self.view.control_panel.contrast_slider.set(0)
+        self.view.control_panel.tones_slider.set(4)
+
+        self.view.log_action("Imagem restaurada e sliders resetados.")
 
 
     # ========== Limiarização ==========

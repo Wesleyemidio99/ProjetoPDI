@@ -83,6 +83,7 @@ class ControlPanel:
         """Reseta sliders e imagem para o estado original."""
         self.brightness_slider.set(0)
         self.contrast_slider.set(0)
+        self.tones_slider.set(4) 
         if self.controller:
             self.controller.reset_image()
         self.add_log("Ajustes de brilho e contraste resetados.")
