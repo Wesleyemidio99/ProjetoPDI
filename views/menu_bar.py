@@ -33,6 +33,8 @@ class MenuBar:
         edge_menu.add_command(label="Laplaciano", command=self.controller.apply_laplacian)
         edge_menu.add_command(label="Canny", command=self.controller.apply_canny)
         filter_menu.add_cascade(label="Detecção de Bordas", menu=edge_menu)
+        filter_menu.add_command(label="Equalização Automática", command=self.controller.apply_equalization)
+
 
         # Menu de Limiarização
         threshold_menu = tk.Menu(filter_menu, tearoff=0)

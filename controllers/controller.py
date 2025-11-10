@@ -199,3 +199,24 @@ class Controller:
 
         HistogramModel.show_histogram(self.model.image, hist_window)
         self.view.log_action("Histograma exibido.")
+
+    def apply_equalization(self):
+        """Aplica equalização de histograma na imagem atual."""
+        # Pega a imagem atual do ImagePanel
+        img = self.view.image_panel.current_image
+
+        if img is None:
+            print("Nenhuma imagem carregada")
+            return
+
+        # Se a imagem for colorida, converte para cinza
+        if len(img.shape) == 3 and img.shape[2] == 3:
+            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        else:
+            gray = img
+
+        # Aplica equalização
+        equalized = cv2.equalizeHist(gray)
+
+        # Atualiza a imagem processada no painel
+        self.view.image_panel.update_image(equalized)

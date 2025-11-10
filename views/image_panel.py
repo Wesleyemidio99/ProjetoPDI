@@ -26,9 +26,11 @@ class ImagePanel:
         # Guarda as referências das imagens
         self.original_imgtk = None
         self.processed_imgtk = None
+        self.current_image = None  # <- adicionamos aqui
 
     def show_original(self, image):
         """Exibe imagem original (OpenCV -> Tkinter)."""
+        self.current_image = image  # guarda imagem original
         self.original_imgtk = self._convert_image(image)
         if self.original_imgtk:
             self.original_panel.config(image=self.original_imgtk)
@@ -36,6 +38,7 @@ class ImagePanel:
 
     def show_processed(self, image):
         """Exibe imagem processada (OpenCV -> Tkinter)."""
+        self.current_image = image  # guarda imagem processada
         self.processed_imgtk = self._convert_image(image)
         if self.processed_imgtk:
             self.processed_panel.config(image=self.processed_imgtk)
@@ -43,9 +46,6 @@ class ImagePanel:
 
     def _convert_image(self, img):
         """Aceita tanto imagem OpenCV (NumPy) quanto PhotoImage."""
-        from PIL import Image, ImageTk
-        import cv2
-
         if img is None:
             return None
 
@@ -61,3 +61,11 @@ class ImagePanel:
 
         img_pil = Image.fromarray(img)
         return ImageTk.PhotoImage(img_pil)
+
+    def update_image(self, img):
+        """Atualiza a imagem processada no painel."""
+        self.current_image = img
+        self.processed_imgtk = self._convert_image(img)
+        if self.processed_imgtk:
+            self.processed_panel.config(image=self.processed_imgtk)
+            self.processed_panel.image = self.processed_imgtk
