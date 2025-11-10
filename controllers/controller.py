@@ -240,22 +240,6 @@ class Controller:
         result = ThresholdModel.multilevel_threshold(img, levels)
         self.view.image_panel.update_image(result)
 
-    def show_histogram(self):
-        img = self.view.image_panel.current_image
-        if img is None:
-            return
-
-        hist = ThresholdModel.histogram(img)
-        if hist is None:
-            return
-
-        # Criar figura do matplotlib
-        fig = plt.Figure(figsize=(4, 2))
-        ax = fig.add_subplot(111)
-        ax.plot(hist)
-        ax.set_title("Histograma")
-        ax.set_xlim([0, 255])
-
         # Adicionar canvas no ImagePanel
         if hasattr(self, 'hist_canvas'):
             self.hist_canvas.get_tk_widget().destroy()  # remove canvas antigo
@@ -263,3 +247,24 @@ class Controller:
         self.hist_canvas = FigureCanvasTkAgg(fig, master=self.view.image_panel.frame)
         self.hist_canvas.get_tk_widget().grid(row=2, column=1, pady=10)  # abaixo do painel processado
         self.hist_canvas.draw()
+
+    def update_brightness_contrast(self, brightness, contrast):
+        """
+        Ajusta brilho e contraste da imagem atual.
+        brightness: -100 a 100
+        contrast: -100 a 100
+        """
+        # Pega a imagem original (não alterada)
+        img = self.model.image  # ou self.model.current / self.model.original dependendo de como você guarda
+        if img is None:
+            return
+
+        # Calcula alpha e beta
+        alpha = 1.0 + (contrast / 100.0)
+        beta = brightness
+
+        # Aplica brilho/contraste na imagem original
+        adjusted = cv2.convertScaleAbs(img, alpha=alpha, beta=beta)
+
+        # Atualiza a imagem processada no painel
+        self.view.image_panel.update_image(adjusted)
