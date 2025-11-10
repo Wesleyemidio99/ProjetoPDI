@@ -15,15 +15,19 @@ class View:
         self.menu = MenuBar(self.root, controller)
         self.root.config(menu=self.menu.menubar)
 
-        # ===== Painéis principais =====
-        self.image_panel = ImagePanel(self.root, controller)
+        # ===== Painel de Controle (criado após menu, antes das imagens) =====
         self.control_panel = ControlPanel(self.root)
+        self.control_panel.set_controller(controller)
 
-        # Bind de eventos de clique (acesso via image_panel)
+        # ===== Painel de Imagens =====
+        # ⚠️ Verifique se ImagePanel aceita 2 parâmetros. Se não aceitar controller, use apenas (self.root)
+        self.image_panel = ImagePanel(self.root, self.controller)
+
+        # ===== Eventos de clique =====
         self.image_panel.original_panel.bind("<Button-1>", lambda e: self.on_click(e, "original"))
         self.image_panel.processed_panel.bind("<Button-1>", lambda e: self.on_click(e, "processed"))
 
-        # Layout
+        # ===== Layout =====
         self.control_panel.frame.pack(side="right", fill="y")
         self.image_panel.frame.pack(side="left", fill="both", expand=True)
 
@@ -41,19 +45,19 @@ class View:
         self.display_processed(image)
 
     def update_image(self, image):
-        """Atualiza o painel processado (mantendo suporte a filtros)."""
+        """Atualiza o painel processado."""
         self.display_processed(image)
 
     # ===== Log de ações =====
     def log_action(self, text):
         self.control_panel.add_log(text)
 
+    # ===== Clique nas imagens =====
     def on_click(self, event, panel_type):
         """Detecta clique do usuário e informa ao Controller as coordenadas do pixel."""
         if self.controller.model.image is None:
             return
 
-        # Determina qual imagem foi clicada
         if panel_type == "original":
             img = self.controller.model.original
             panel = self.image_panel.original_panel
@@ -64,12 +68,12 @@ class View:
         if img is None:
             return
 
-        # Dimensões da imagem real e da exibida no Tkinter
+        # Dimensões reais x exibidas
         h, w = img.shape[:2]
         panel_w = panel.winfo_width()
         panel_h = panel.winfo_height()
 
-        # Calcula coordenadas relativas do clique
+        # Coordenadas proporcionais
         x = int(event.x * w / panel_w)
         y = int(event.y * h / panel_h)
 

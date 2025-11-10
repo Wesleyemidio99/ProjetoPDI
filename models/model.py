@@ -79,3 +79,21 @@ class Model:
             "rgb": (int(r), int(g), int(b)),
             "hsv": (int(h_val), int(s_val), int(v_val))
         }
+    
+    def adjust_brightness_contrast(self, brightness=0, contrast=0):
+        """Ajusta brilho e contraste da imagem atual."""
+        if self.image is None:
+            return None
+
+        # Converte brilho/contraste para escala do OpenCV
+        brightness = int(brightness)
+        contrast = int(contrast)
+
+        # Fórmula de ajuste:
+        img = np.int16(self.image)
+        img = img * (contrast / 127 + 1) - contrast + brightness
+        img = np.clip(img, 0, 255)
+        img = np.uint8(img)
+
+        self.image = img
+        return self.to_tk_image(img)
